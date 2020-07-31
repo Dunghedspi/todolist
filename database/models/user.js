@@ -22,6 +22,7 @@ module.exports = (sequelize) => {
             },
             role: {
                 type: DataTypes.BOOLEAN,
+                defaultValue: false,
             },
             avatar: {
                 type: DataTypes.STRING(100),
@@ -33,13 +34,17 @@ module.exports = (sequelize) => {
             },
             fullName: {
                 type: DataTypes.STRING(100),
-                allowNull: false,
+                allowNull: true,
             },
         },
         { modelName: 'user', sequelize, paranoid: true }
     );
     user.associate = (Models) => {
         user.hasMany(Models.task, {
+            foreignKey: {
+                name: 'userId',
+                allowNull: false,
+            },
             onUpdate: 'CASCADE',
             onDelete: 'CASCADE',
         });

@@ -7,14 +7,12 @@ module.exports = () => {
         signIn: async (username) => {
             const result = await Models.user
                 .findOne({
-                    attributes: ['id', 'role'],
+                    attributes: ['id', 'role', 'password'],
                     where: {
                         userName: username,
                     },
                 })
-                .then((data) => {
-                    return data;
-                })
+                .then((data) => data)
                 .catch((error) => {
                     throw new Error(error);
                 });
@@ -23,8 +21,8 @@ module.exports = () => {
         signUp: async (payload) => {
             let { userName, email } = payload;
             let date = new Date();
-            payload.createAt = payload.updatedAt = date;
-            const result = await Models.user
+            payload.createdAt = payload.updatedAt = date;
+            const result = Models.user
                 .findOrCreate({
                     attributes: ['id', 'role'],
                     where: {
@@ -41,17 +39,17 @@ module.exports = () => {
                         ...payload,
                     },
                 })
-                .then((data) => {
-                    return data;
-                })
+                .then((data) => data)
                 .catch((error) => {
-                    throw new Error(error + '');
+                    return error;
                 });
             return result;
         },
         getInfor: async (id) => {
             const result = await Models.user
-                .findByPk(id)
+                .findByPk(id, {
+                    attributes: ['userName', 'avatar', 'phone', 'email', 'fullName'],
+                })
                 .then((data) => data)
                 .catch((error) => {
                     throw new Error(error + '');

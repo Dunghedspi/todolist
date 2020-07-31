@@ -1,0 +1,12 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const verifyToken = require('../middleware/veryToken');
+const taskController = require('../controller/taskController')();
+const Router = express.Router();
+Router.use(bodyParser.json());
+Router.use(bodyParser.urlencoded({ extended: false }));
+Router.get('/gettask', verifyToken, taskController.getTask);
+Router.put('/createtask', verifyToken, taskController.createTask);
+Router.patch('/edittask', verifyToken, taskController.editTask);
+Router.delete('/deletetask/:id', verifyToken, taskController.deleteTask);
+module.exports = Router;

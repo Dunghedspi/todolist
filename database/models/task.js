@@ -3,7 +3,7 @@ module.exports = (sequelize) => {
     class task extends Model {}
     task.init(
         {
-            name: {
+            title: {
                 type: DataTypes.STRING(100),
                 allowNull: false,
             },
@@ -28,8 +28,13 @@ module.exports = (sequelize) => {
         },
         { modelName: 'task', sequelize, paranoid: true }
     );
-    task.associtate = (Models) => {
-        task.belongsTo(Models.user, {});
+    task.associate = (Models) => {
+        task.belongsTo(Models.user, {
+            foreignKey: {
+                name: 'userId',
+                allowNull: false,
+            },
+        });
     };
     return task;
 };
